@@ -1,0 +1,81 @@
+# This is the main environment variable script for the findhost-populate.sh script
+# Set all the environment variables needed for the consolidator, the collector and
+# the individual collector scripts like Frontix.
+# If a local .env file does not exists then the individual .env files in each
+# script folder will be loaded.
+# If no .env files exist then the script default variables are used.
+# The parameter $SCRIPTDIR is known from the main script and is the location of
+# the script.
+
+
+# ENABLE EXTRA PYTHON DEBUGGING
+#PYTHONVERBOSE=0
+
+# ENABLE MORE VERBOSE LOGGING
+VERBOSE=False
+
+# GLOBAL LOG DIR, ALL SCRIPTS WILL LOG HERE
+LOGDIR="$SCRIPTDIR/log"
+
+# THE FINDHOST COLLECTIONS DIR
+COLLECTIONSDIR="$SCRIPTDIR/collections"
+
+# THE MAIN OUTPUT FOLDER WHERE THE FINDHOST DATA IS STORED
+OUTPUTDIR="$SCRIPTDIR/output"
+
+# THE MAIN FOLDER WHERE THE COLLECTOR SCRIPT CAN BE FOUND
+COLLECTORDIR="$SCRIPTDIR/collector"
+
+# THE MAIN FOLDER WHERE THE CONSOLIDATOR SCRIPT CAN BE FOUND
+CONSOLIDATORDIR="$SCRIPTDIR/consolidator"
+
+
+
+###########################################
+## COLLECTOR VARIABLES
+###########################################
+
+# ENABLE THE FRONTIX COLLECTOR
+RUN_COLLECTOR_FRONTIX=1
+
+# FRONTIX COLLECTOR FOLDER
+COLLECTOR_FRONTIX_FOLDER="$COLLECTORDIR/frontix"
+
+# FRONTIX COLLECTOR QUERY FOLDER
+QUERY_SQL_DIR="$COLLECTOR_FRONTIX_FOLDER/frontix_dump_queries"
+#QUERY_SQL_DIR="$COLLECTOR_FRONTIX_FOLDER/frontix_dump_queries_test"
+
+# FRONTIX COLLECTOR OUTPUT FOLDER
+QUERY_OUTPUT_DIR="$COLLECTIONSDIR/frontix"
+
+# FRONTIX COLLECTOR LIMIT QUERY RESULTS
+#QUERY_LIMIT=10
+
+# INCLUDE FRONTIX DB PARAMETERS
+# EX USERNAME, DB, SERVER, ..
+if [ -f "/etc/mydb-parameters" ]; then
+    . /etc/mydb-parameters
+else
+    # VARIABLES USED FOR CONNECTIONS TO FRONTIX
+    FTX_HOSTNAME="<HOSTNAME>"
+    FTX_PORT="<PORT>"
+    FTX_SERVICE="<SERVICE>"
+    FTX_USER="<USERNAME>"
+    FTX_PWD="<PASSWORD>"
+fi
+
+
+
+###########################################
+## CONSOLIDATOR VARIABLES
+###########################################
+
+# FOLDER WHERE THE FRONTIX DATA CAN BE FOUND
+NISFOLDER="$COLLECTIONSDIR/frontix"
+
+# folder to be used by the script to store temp data
+TEMPFOLDER="$CONSOLIDATORDIR/tmp"
+
+# folder where the output result is stored
+CONSOLIDATOR_OUTPUT_FOLDER="$OUTPUTDIR"
+

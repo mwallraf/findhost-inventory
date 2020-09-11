@@ -1,0 +1,42 @@
+# environment variables for running the findhost-collector-frontix script
+# The script collects all data from Frontix
+# This environment variables script is only run when
+# the variable $FINDHOST_COLLECTOR_FRONTIX is not known.
+# Useful when running the script as standalone
+
+# enable if you want verbose python debugging info
+#PYTHONVERBOSE=1
+
+# limit the result of each query to max 10 rows, for testing purposes usually
+QUERY_LIMIT=10
+
+# the location of the findhost-collector-frontix script
+COLLECTOR_FRONTIX_FOLDER="."
+
+# the location of the frontix queries
+QUERY_SQL_DIR="frontix_dump_queries"
+#QUERY_SQL_DIR="frontix_dump_queries_test"
+
+# the location of the query results
+QUERY_OUTPUT_DIR="frontix_dump_output"
+
+# the location of the log file
+LOGDIR="log"
+
+# The default postprocessor to use, check the 
+# postprocessors folder for other options
+#FTX_POSTPROCESSOR=ppcsv
+
+# INCLUDE FRONTIX DB PARAMETERS
+# EX USERNAME, DB, SERVER, ..
+if [ -f "/etc/mydb-parameters" ]; then
+    . /etc/mydb-parameters
+else
+    # VARIABLES USED FOR CONNECTIONS TO FRONTIX
+    FTX_HOSTNAME="<HOSTNAME>"
+    FTX_PORT="<PORT>"
+    FTX_SERVICE="<SERVICE>"
+    FTX_USER="<USERNAME>"
+    FTX_PWD="<PASSWORD>"
+fi
+

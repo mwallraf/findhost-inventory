@@ -1,0 +1,33 @@
+# environment variables for running the findhost-consolidator script
+# The script consolidates all data stored in the findhost collections folders
+# This environment variables script is only run when
+# the variable $FINDHOST_VALIDATOR is not known.
+# Useful when running the script as standalone
+
+# environment variables for the consolidator script
+# this file is only used if FINDHOST_VALIDATOR does not exist
+
+# enable if you want verbose python debugging info
+#PYTHONVERBOSE=1
+
+# enable more verbose logging
+VERBOSE=False
+
+# location of the findhost-consolidator.sh script
+CONSOLIDATORDIR="."
+
+# location of the log folder
+LOGDIR="log"
+
+# location of the findhost collections
+COLLECTIONSDIR="../collections"
+
+# location where all the frontix files can be found
+NISFOLDER="$COLLECTIONSDIR/frontix"
+
+# folder to be used by the script to store temp data
+TEMPFOLDER="tmp"
+
+# folder where the output result is stored
+CONSOLIDATOR_OUTPUT_FOLDER="output"
+

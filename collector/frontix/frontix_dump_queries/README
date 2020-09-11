@@ -1,0 +1,3 @@
+Store files that contain SQL queries here.
+Each file should contain maximum 1 query and the filename should and with .sql
+The output of each query will be stored in the frontix_dump_output folder
