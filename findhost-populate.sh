@@ -31,7 +31,6 @@ readonly SHORT_OPTS=hv
 # Script name
 readonly SCRIPT_NAME=${0##*/}
 
-
 #######################################
 # SCRIPT CONFIGURATION CONSTANTS
 #######################################
@@ -83,6 +82,52 @@ if [ -z $OUTPUTDIR ]; then
   OUTPUTDIR="$SCRIPTDIR/output"
 fi
 
+# dir containing the findhost output archives
+if [ -z $ARCHIVEDIR ]; then
+  ARCHIVEDIR="$SCRIPTDIR/archive"
+fi
+
+# Archive options - daily, weekly, monthly compressed file
+if [[ -z ${ARCHIVE_TARGZFILE} ]]; then
+  readonly ARCHIVE_TARGZFILE=findhost.tar.gz
+fi
+
+# Archive options - folder date format
+if [[ -z ${ARCHIVE_DATEFORMAT} ]]; then
+  readonly ARCHIVE_DATEFORMAT="%d-%m-%Y"
+fi
+
+# Archive options - number of days to store daily backups
+if [[ -z ${ARCHIVE_DAILY_HISTORY} ]]; then
+  readonly ARCHIVE_DAILY_HISTORY=7
+fi
+
+# Archive options - number of days to store weekly backups
+if [[ -z ${ARCHIVE_WEEKLY_HISTORY} ]]; then
+  readonly ARCHIVE_WEEKLY_HISTORY=60
+fi
+
+# Archive options - number of days to store monthly backups
+if [[ -z ${ARCHIVE_MONTHLY_HISTORY} ]]; then
+  readonly ARCHIVE_MONTHLY_HISTORY=900
+fi
+
+# Archive options - the daily backup folder name
+if [[ -z ${ARCHIVE_DAILY_FOLDER} ]]; then
+  readonly ARCHIVE_DAILY_FOLDER="backup.daily"
+fi
+
+# Archive options - the weekly backup folder name
+if [[ -z ${ARCHIVE_WEEKLY_FOLDER} ]]; then
+  readonly ARCHIVE_WEEKLY_FOLDER="backup.weekly"
+fi
+
+# Archive options - the monthly backup folder name
+if [[ -z ${ARCHIVE_MONTHLY_FOLDER} ]]; then
+  readonly ARCHIVE_MONTHLY_FOLDER="backup.monthly"
+fi
+
+
 #######################################
 # help command
 #######################################
@@ -106,6 +151,7 @@ COMMANDS:
   help                    Display detailed help
   version                 Print version information.
   run                     Run the findhost-populate script
+  archive                 Start the backup archive script  
 
 END
   exit 1
@@ -162,6 +208,75 @@ function run_findhost_populate() {
 
   echo "end findhost-populate at: "`date +"%Y-%m-%d %H:%M"`" ($SECONDS secs runtime)"
 }
+
+
+
+
+##################################
+# Start the archive script
+##################################
+function start_archive() {
+  echo "--- Start the backup archive script ---"
+  SECONDS=0
+
+  # check if any output files exist otherwise there is nothing to do
+  if [ ! -f "$OUTPUTDIR/findhost.source.csv" ]; then
+     echo "quit archive script, no output files found"
+     exit 1
+  fi
+
+  # Storage folder where to move backup files
+  # Must contain backup.monthly backup.weekly backup.daily folders
+  INCOMINGDIR=$ARCHIVEDIR/incoming
+
+  mkdir -p $INCOMINGDIR
+
+  # TAR + gzip the config folder to the archive folder
+  cd $$OUTPUTDIR
+  tar cf - findhost.source.* | gzip -9 > $INCOMINGDIR/$ARCHIVE_TARGZFILE
+
+  # Destination file names
+  date_daily=`date +"${ARCHIVE_DATEFORMAT}"`
+
+  # Get current month and week day number
+  month_day=`date +"%d"`
+  week_day=`date +"%u"`
+
+  # It is logical to run this script daily. We take files from source folder and move them to
+  # appropriate destination folder
+
+  # On first month day do (monthly backups)
+  if [ "$month_day" -eq 1 ] ; then
+    destination=$ARCHIVEDIR/backup.monthly/$date_daily
+  else
+    # On saturdays do (weekly backups)
+    if [ "$week_day" -eq 6 ] ; then
+      destination=$ARCHIVEDIR/backup.weekly/$date_daily
+    else
+      # On any regular day do (daily backups)
+      destination=$ARCHIVEDIR/backup.daily/$date_daily
+    fi
+  fi
+
+  # Move the files
+  mkdir -p $destination
+  mv -v $INCOMINGDIR/* $destination
+
+  # daily - keep for 14 days
+  find $ARCHIVEDIR/$ARCHIVE_DAILY_FOLDER/ -maxdepth 1 -mtime +$ARCHIVE_DAILY_HISTORY -type d -exec rm -rv {} \;
+
+  # weekly - keep for 60 days
+  find $ARCHIVEDIR/$ARCHIVE_WEEKLY_FOLDER/ -maxdepth 1 -mtime +$ARCHIVE_WEEKLY_HISTORY -type d -exec rm -rv {} \;
+
+  # monthly - keep for 900 days
+  find $ARCHIVEDIR/$ARCHIVE_MONTHLY_FOLDER/ -maxdepth 1 -mtime +$ARCHIVE_MONTHLY_HISTORY -type d -exec rm -rv {} \;
+
+  rm -rf $INCOMINGDIR
+
+  echo "--- The script has taken $SECONDS seconds to finish ---"
+}
+
+
 
 #######################################
 #
@@ -239,6 +354,9 @@ function main() {
 
     # version
     run)  run_findhost_populate ;;
+
+    # start the archive script
+    archive) start_archive ;;
 
     # Unknown command
     *)  err "Unknown command '$command'"; exit 2; ;;

@@ -36,6 +36,7 @@ Each script can be run individually as well for testing and debugging
 
 ```
 bash findhost-populate.sh --collect --consolidate run
+bash findhost-populate.sh archive
 ```
 
 ## ENVIRONMENT VARIABLES
