@@ -4,7 +4,7 @@ ARG TZ='Europe/Brussels'
 
 ENV TZ ${TZ}
 ENV LD_LIBRARY_PATH=/lib:/lib/oracle/11.2/client64/lib
-ENV ORACLE_HOME=/lib/oracle/11.2/client64/lib
+ENV ORACLE_HOME=/lib/oracle/11.2/client64
 
 RUN apk update
 
@@ -22,7 +22,8 @@ ADD . /opt/findhost-inventory
 ADD functions/entrypoint.sh /entrypoint.sh
 
 # Oracle instaclient 11.2 lib files
-ADD functions/oracle /lib/oracle
+RUN unzip /opt/findhost-inventory/functions/oracle.zip -d /lib/
+RUN rm -rf /opt/findhost-inventory/functions/oracle.zip
 
 # link the oracle client
 RUN ln -s /lib/oracle/11.2/client64/lib/libclntsh.so.11.1 /lib/oracle/11.2/client64/lib/libclntsh.so
