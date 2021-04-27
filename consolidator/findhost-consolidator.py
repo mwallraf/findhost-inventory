@@ -106,7 +106,8 @@ KEEPCOLS = [ 'SERVICEID', # VT reference
              'OBS_CE_MAN_LOOPBACK', # loopback ip for OBS connected L3 VPN routers
              'CASEID',
              'SERVICE_TYPE_2', # ADD/DELETE/...
-             'FULLNAME', # Project manager name
+             'PM_FULLNAME', # Project manager name
+             'PM_EMAILADDRESS', # Project manager email address
              'ACCOUNTMANAGER',
              'SITE_ID',
              'SITE_SITENAME',
