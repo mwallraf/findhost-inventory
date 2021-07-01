@@ -55,6 +55,7 @@
 #   v1.0.23 - 20190426 - add TRUVIEW_SITE_AUTOGEN field, generated automatically for Truview customers
 #   v1.0.24 - 20190531 - add TRUVIEW_SITE_DESCR_AUTOGEN field, generated automatically for Truview customers
 #   v1.0.25 - 20200911 - add SNMP discovery info, prepended by DISC_
+#   v1.0.26 - 20210701 - add VT remarks
 
 import os
 import re
@@ -63,7 +64,7 @@ import socket
 import struct
 import logging
 
-VERSION = "1.0.21"
+VERSION = "1.0.26"
 
 VERBOSE = eval(os.environ.get("VERBOSE", "True").title())
 SCRIPTDIR = os.environ.get("SCRIPTDIR", ".")
@@ -350,6 +351,11 @@ KEEPCOLS = [ 'SERVICEID', # VT reference
              'DISC_SERVICE',    # mapping of IP to service
              'NAPALM_DRIVER',   # mapping of SYSOBJID to driver
              'DISC_PROTOCOL',   # based on nmap (either 22 for ssh or 23 for telnet)
+             # VT remarks
+             'REMARKS_ACCOUNT',
+             'REMARKS_CONTRACT',
+             'REMARKS_PROVISION',
+             'REMARKS_SERVICE',
              ]
 
 IGNORE_FILES = [ 'dump_query_2_ts_last.csv', 'dump_query_15_ts_last.csv' ]  ## ignore these files if they were found
