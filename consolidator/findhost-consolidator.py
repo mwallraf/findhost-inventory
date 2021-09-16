@@ -337,11 +337,16 @@ KEEPCOLS = [ 'SERVICEID', # VT reference
              #'VT_ID', = SERVICEID
              'VDSL2TYPE', # manipulated from SERVICE column => "VDSL Dedicated": "VDSL2_DEDICATED",  "VDSL Internet": "VDSL2_SHARED",  should be last column because it may be changed depending on other column values
              'PARTNER', # column indicating the CPE PARTNER (ex. OBS, INTEROUTE, FT, T2, ...),  should be last column because it may be changed depending on other column values
+             # NPM (TRUVIEW)
              'TRUVIEW_SITE_AUTOGEN',  # column of auto-generated site name to be used in Truview, only for truview customers
              'TRUVIEW_SITE_DESCR_AUTOGEN',  # column of auto-generated site name to be used in Truview, only for truview customers
              'NPM_LOGIN', # login account for NPM
              'NPM_PSW',   # password for NPM
              'NPM_IP',    # ip address for NPM
+             'NPM_BW_DOWN_MB', # SITE download speed in MB, overrides SNMP discovery
+             'NPM_BW_UP_MB', # SITE upload speed in MB, overrides SNMP discovery
+             'NPM_SITE_DESCR', # SITE description, overrides the AUTOGEN SITE DESCR
+             'NPM_SITE_NAME', # SITE name, overrids AUTOGEN SITE NAME
              # info discovered by network-discovery and router-config-parser, SNMP discovered so RELIABLE
              'DISC_DOMAINNAME', # dns domain name
              'DISC_COMMUNITY',  # snmp community that was used to connect
