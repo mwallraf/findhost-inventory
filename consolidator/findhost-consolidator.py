@@ -56,6 +56,7 @@
 #   v1.0.24 - 20190531 - add TRUVIEW_SITE_DESCR_AUTOGEN field, generated automatically for Truview customers
 #   v1.0.25 - 20200911 - add SNMP discovery info, prepended by DISC_
 #   v1.0.26 - 20210701 - add VT remarks
+#   v1.0.27 - 20211109 - add NPM info
 
 import os
 import re
@@ -64,7 +65,7 @@ import socket
 import struct
 import logging
 
-VERSION = "1.0.26"
+VERSION = "1.0.27"
 
 VERBOSE = eval(os.environ.get("VERBOSE", "True").title())
 SCRIPTDIR = os.environ.get("SCRIPTDIR", ".")
@@ -347,6 +348,8 @@ KEEPCOLS = [ 'SERVICEID', # VT reference
              'NPM_BW_UP_MB', # SITE upload speed in MB, overrides SNMP discovery
              'NPM_SITE_DESCR', # SITE description, overrides the AUTOGEN SITE DESCR
              'NPM_SITE_NAME', # SITE name, overrids AUTOGEN SITE NAME
+             'NPM_DOMAIN_NAME', # NPM DOMAIN NAME (HARDCODED)
+             'NPM_DOMAIN_ID',  # NPM DOMAIN ID (HARDCODED)
              # info discovered by network-discovery and router-config-parser, SNMP discovered so RELIABLE
              'DISC_DOMAINNAME', # dns domain name
              'DISC_COMMUNITY',  # snmp community that was used to connect
@@ -415,6 +418,19 @@ TRUVIEW_SITE_NAMES = {
     "900084334": { "delim": " ", "columns": [ "SITE_CITY", "SITE_STREET" ] },
     "900154648": { "delim": " ", "columns": [ "SITE_CITY", "SITE_STREET" ] },
 }
+
+# NPM ACCOUNT TO DOMAIN HARDCODE MAPPING
+NPM_ACCOUNT_TO_DOMAIN_MAP = {
+    "900084334": { "domainId": 11, "domainName": "Adecco Domain" }
+    "900136919": { "domainId": 12, "domainName": "Select Human Resources Domain" }
+    "900154553": { "domainId": 13, "domainName": "Impact" }
+    "900154609": { "domainId": 14, "domainName": "[OBE - DEMO]" }  #  OrangeShop
+    "900154616": { "domainId": 16, "domainName": "Matexi Group" }
+    "900087514": { "domainId": 17, "domainName": "Irisnet" }
+    "900154648": { "domainId": 18, "domainName": "MEDIMARKET" }
+}
+
+
 
 # list of IP addresses known in the network that respond to ping
 # this is the output of the network-discovery script
@@ -592,6 +608,7 @@ def customfields(field, column='', record=None):
                 break
 
     ## Generate the Truview site based on SITE_ID + SITE_NAME (132 chars)
+    ## Add NPM domainid and domain names
     elif column == 'ACCOUNTID' and field in TRUVIEW_ACCOUNTS:
         truview_site_name = []
         tv_site_format = TRUVIEW_SITE_NAMES.get(field, TRUVIEW_SITE_NAMES["DEFAULT"])
@@ -605,6 +622,9 @@ def customfields(field, column='', record=None):
         tv_site_description = ("{} - {}".format(record.get("SITE_ID", ""), record.get("SITE_SITENAME")))[0:132]
         record['TRUVIEW_SITE_DESCR_AUTOGEN'] = tv_site_description
 
+        if field in NPM_ACCOUNT_TO_DOMAIN_MAP:
+            record['NPM_DOMAIN_NAME'] = NPM_ACCOUNT_TO_DOMAIN_MAP[field]["domainName"]
+            record['NPM_DOMAIN_ID'] = NPM_ACCOUNT_TO_DOMAIN_MAP[field]["domainId"]
 
     ## update the PARTNER field; assign OBS if the ESU port = 00350-ESU01-002/00-0/00-03/01
     elif column == 'LABEL':
