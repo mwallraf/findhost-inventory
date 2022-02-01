@@ -211,6 +211,7 @@ KEEPCOLS = [ 'SERVICEID', # VT reference
              'CPE_TRANSMISSION',
              'CPE_INFO_FROM',
              'CPE_INTF_FUNCTION',
+             'CPE_INTF_ALL_VT',  # all VT's found on the CPE + PE interface
              # parsed from QOS description in CPE, ex: *** AUTO UPDATED ON: 2015-07-15 - LP:LP701 (20/2) ***
              'CPE_VDSL_LP',      ## the configured VDSL lineprofile
              'CPE_VDSL_BW_DOWNLOAD',  ## the configured VDSL download bandwidth
@@ -624,7 +625,7 @@ def customfields(field, column='', record=None):
 
         if field in NPM_ACCOUNT_TO_DOMAIN_MAP:
             record['NPM_DOMAIN_NAME'] = NPM_ACCOUNT_TO_DOMAIN_MAP[field]["domainName"]
-            record['NPM_DOMAIN_ID'] = NPM_ACCOUNT_TO_DOMAIN_MAP[field]["domainId"]
+            record['NPM_DOMAIN_ID'] = str(NPM_ACCOUNT_TO_DOMAIN_MAP[field]["domainId"])
 
     ## update the PARTNER field; assign OBS if the ESU port = 00350-ESU01-002/00-0/00-03/01
     elif column == 'LABEL':
