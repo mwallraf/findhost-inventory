@@ -36,15 +36,21 @@ QUERY_OUTPUT_DIR="frontix_dump_output"
 # the location of the log file
 LOGDIR="log"
 
-# The default postprocessor to use, check the 
+# The default postprocessor to use, check the
 # postprocessors folder for other options
 #FTX_POSTPROCESSOR=ppcsv
 
-# VARIABLES USED FOR CONNECTIONS TO THE DATABASE
+# VARIABLES USED FOR CONNECTIONS TO THE MES FRONTIX DATABASE
 FTX_HOSTNAME="<HOSTNAME>"
 FTX_PORT="<PORT>"
 FTX_SERVICE="<SERVICE>"
 FTX_USER="<USERNAME>"
 FTX_PWD="<PASSWORD>"
-```
 
+# VARIABLES USED FOR CONNECTIONS TO OBE FRONTIX DATABASE
+FTX_OBE_HOSTNAME="<HOSTNAME>"
+FTX_OBE_PORT="<PORT>"
+FTX_OBE_SID="<SERVICE>"
+FTX_OBE_USER="<USERNAME>"
+FTX_OBE_PWD="<PASSWORD>"
+```

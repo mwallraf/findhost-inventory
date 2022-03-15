@@ -2,16 +2,17 @@
 
 The findhost script has 3 parts:
 
-* the datasource collector (findhost-collector) which collects all data and stores in the collections folder
-* the consolidator (findhost-consolidator) which consolidates all collections into a single file
-* the findhost client script which is a frontend grep tool to parse the consolidated findhost file 
+-   the datasource collector (findhost-collector) which collects all data and stores in the collections folder
+-   the consolidator (findhost-consolidator) which consolidates all collections into a single file
+-   the findhost client script which is a frontend grep tool to parse the consolidated findhost file
 
 ## DOCKER
 
 Build process:
 
 ```
-docker build --tag mwallraf/findhost-inventory:latest .
+docker build --tag mwallraf/findhost-inventory:tagname .
+docker push mwallraf/findhost-inventory:tagname
 ```
 
 Start Docker:
@@ -27,7 +28,6 @@ docker run --detach --name findhost-inventory \
   -v /opt/findhost-inventory/etc/env-findhost-collector-frontix:/opt/findhost-inventory/collector/frontix/.env \
   mwallraf/findhost-inventory:latest
 ```
-
 
 ## RUN THE SCRIPT
 
@@ -96,6 +96,13 @@ else
     FTX_SERVICE="<SERVICE>"
     FTX_USER="<USERNAME>"
     FTX_PWD="<PASSWORD>"
+
+    # VARIABLES USED FOR CONNECTIONS TO OBE FRONTIX DATABASE
+    FTX_OBE_HOSTNAME="<HOSTNAME>"
+    FTX_OBE_PORT="<PORT>"
+    FTX_OBE_SID="<SERVICE>"
+    FTX_OBE_USER="<USERNAME>"
+    FTX_OBE_PWD="<PASSWORD>"
 fi
 
 
