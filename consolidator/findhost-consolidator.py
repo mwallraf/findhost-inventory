@@ -362,6 +362,7 @@ KEEPCOLS = ['SERVICEID',  # VT reference
             'NPM_DOMAIN_NAME',  # NPM DOMAIN NAME (HARDCODED)
             'NPM_DOMAIN_ID',  # NPM DOMAIN ID (HARDCODED)
             # info discovered by network-discovery and router-config-parser, SNMP discovered so RELIABLE
+            'DISC_MGMT_IP',     # discovered management ip
             'DISC_DOMAINNAME',  # dns domain name
             'DISC_COMMUNITY',  # snmp community that was used to connect
             'DISC_SYSOBJID',   # system sysobjid
