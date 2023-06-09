@@ -57,6 +57,7 @@
 #   v1.0.25 - 20200911 - add SNMP discovery info, prepended by DISC_
 #   v1.0.26 - 20210701 - add VT remarks
 #   v1.0.27 - 20211109 - add NPM info
+#   v1.0.28 - 20230609 - add product info fields
 
 import os
 import re
@@ -378,6 +379,20 @@ KEEPCOLS = ['SERVICEID',  # VT reference
             'REMARKS_CONTRACT',
             'REMARKS_PROVISION',
             'REMARKS_SERVICE',
+            # PRODUCT info tab tracker
+            'PINFO_CONFIGURATION', 
+            'PINFO_COMMERCIAL_COS', 
+            'PINFO_REMARKS_ACCOUNT', 
+            'PINFO_REMARKS_CONTRACT', 
+            'PINFO_REMARKS_PROVISION', 
+            'PINFO_REMARKS_SERVICE', 
+            'PINFO_TOPOLOGY',
+            'PINFO_TYPE_OF_QOS', 
+            'PINFO_TAGGING_OPTION', 
+            'PINFO_SITE_A_CVLAN', 
+            'PINFO_SITE_A_SVLAN', 
+            'PINFO_SITE_B_CVLAN', 
+            'PINFO_SITE_B_SVLAN',
             ]
 
 # ignore these files if they were found
