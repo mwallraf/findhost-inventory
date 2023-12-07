@@ -58,6 +58,7 @@
 #   v1.0.26 - 20210701 - add VT remarks
 #   v1.0.27 - 20211109 - add NPM info
 #   v1.0.28 - 20230609 - add product info fields
+#   v1.0.29 - 20231207 - add VDSL LDAP parameters
 
 import os
 import re
@@ -393,6 +394,23 @@ KEEPCOLS = ['SERVICEID',  # VT reference
             'PINFO_SITE_A_SVLAN', 
             'PINFO_SITE_B_CVLAN', 
             'PINFO_SITE_B_SVLAN',
+            # VDSL LDAP
+            'LDAP_MOBIUSERNAME',
+            'LDAP_USERPASSWORD',
+            'LDAP_MOBICUSTOMERPOLICING',
+            'LDAP_MOBIALLOWEDPE',
+            'LDAP_MOBIVRFTYPE',
+            'LDAP_MOBIPELOOPBACKNUMBER',
+            'LDAP_MOBICUSTOMERNAME',
+            'LDAP_MOBIVRFTEMPLATEINDEX',
+            'LDAP_MOBICEMAINIPADDRESS',
+            'LDAP_MOBICEMAINIPMASK',
+            'LDAP_CURRENTSTATUSDATE',
+            'LDAP_CREATIONDATE',
+            'LDAP_MODIFICATIONDATE',
+            'LDAP_ACTIVE',
+            'LDAP_MODIFICATIONTYPE',
+            'LDAP_STATUS',
             ]
 
 # ignore these files if they were found
