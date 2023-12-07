@@ -67,7 +67,7 @@ import socket
 import struct
 import logging
 
-VERSION = "1.0.27"
+VERSION = "1.0.29"
 
 VERBOSE = eval(os.environ.get("VERBOSE", "True").title())
 SCRIPTDIR = os.environ.get("SCRIPTDIR", ".")
