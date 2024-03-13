@@ -59,6 +59,7 @@
 #   v1.0.27 - 20211109 - add NPM info
 #   v1.0.28 - 20230609 - add product info fields
 #   v1.0.29 - 20231207 - add VDSL LDAP parameters
+#   v1.0.30 - 20240313 - add LL_SLA
 
 import os
 import re
@@ -67,7 +68,7 @@ import socket
 import struct
 import logging
 
-VERSION = "1.0.29"
+VERSION = "1.0.30"
 
 VERBOSE = eval(os.environ.get("VERBOSE", "True").title())
 SCRIPTDIR = os.environ.get("SCRIPTDIR", ".")
@@ -267,6 +268,7 @@ KEEPCOLS = ['SERVICEID',  # VT reference
             'LL_ISHALFLINK',
             'LL_ISMULTILINK',
             'LL_SALESDEPT',
+            'LL_SLA', # OLO/LL SLA field
             # TROPS SVLAN
             'SVLAN_CONNECTIONID',
             'SVLAN_STATUS',
