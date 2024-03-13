@@ -36,9 +36,10 @@
 ## 2.0.26 - 20210701 - add VT remarks
 ## 2.0.27 - 20210916 - add NPM columns
 ## 2.0.28 - 20230906 - add PRODUCT INFO columns
+## 2.0.29 - 20240313 - add LL_SLA + add color and change format to limit extra long fields
 
 
-VERSION="2.0.28"
+VERSION="2.0.29"
 
 ## initalize parameters
 SCRIPT="findhost"
@@ -55,6 +56,7 @@ GREP_OPTS=""
 # EXACT_MATCH indicates if the RELATED_KEYS column is searched as well.  If enabled then this column is not included in searches
 EXACT_MATCH=0
 EXACT_MATCH_COLUMN=6
+STATUS_COLUMN=2
 OUTPUT_FORMAT="brief"
 OUTPUT_FORMAT_OPTIONS=("brief" "detail" "raw" "csv" "single" "short" "mobile")
 DELIM=";"
@@ -109,6 +111,10 @@ FORMAT_GWOS_POSTPROCESS="cat"
 NORM=`tput sgr0`
 BOLD=`tput bold`
 REV=`tput smso`
+RED='\033[0;31m'    # Red color
+GREEN='\033[0;32m'  # Green color
+NC='\033[0m'        # No Color, to reset the color
+
 
 # function to read the private config file
 # if no private config file exists then one is created
@@ -711,15 +717,26 @@ case $OUTPUT_FORMAT in
            do
                ## we can have multiple columns defined delimited by |
                ## the first column for which a value is found will be printed
+               color=""
+               status_value="${SPLITLINE[$STATUS_COLUMN]}"
+
                declare ALLKEYS=()
                IFS=\| read -a ALLKEYS <<<"$c"
                FOUNDVALUE=0
+               if [ "$status_value" == "Inactive" ]; then
+                   color=$RED
+               #else
+               #    color=$GREEN
+               fi
                for akey in ${ALLKEYS[@]}
                do
                    key=C_$akey
                    colid=${!key}
                    value="${SPLITLINE[$colid]}"
                    if [ -n "$value" ] && [[ "$colid" =~ [0-9]+ ]]; then
+                       if [[ "${#value}" -gt 40 ]]; then
+                           value="${value:0:36} ..."
+                       fi
                        AWKPARAM=("${AWKPARAM[@]}" "$value")
                        FOUNDVALUE=1
                        break
@@ -729,7 +746,9 @@ case $OUTPUT_FORMAT in
                    AWKPARAM=("${AWKPARAM[@]}" "-")
                fi
            done
-           printf "$FORMAT_BRIEF" "${AWKPARAM[@]}" | eval ${FORMAT_BRIEF_POSTPROCESS}
+           echo -ne "${color}"
+           printf "$FORMAT_BRIEF" "${AWKPARAM[@]}" | eval ${FORMAT_BRIEF_POSTPROCESS} 
+           echo -ne "${NC}"
            updatecounter
        done < <(eval ${GREP_COMMAND})
        ;;
